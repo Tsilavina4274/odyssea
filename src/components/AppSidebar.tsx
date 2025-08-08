@@ -43,6 +43,8 @@ const candidateItems = [
   { title: 'Rechercher Formations', url: '/search-university', icon: Search },
   { title: 'Mes Candidatures', url: '/applications', icon: FileText },
   { title: 'Suivi Admissions', url: '/track-applications', icon: BarChart3 },
+  { title: 'Messages', url: '/messages', icon: MessageCircle },
+  { title: 'Ressources', url: '/study-resources', icon: Library },
   { title: 'Calendrier', url: '/calendar', icon: Calendar },
   { title: 'Universités', url: '/universities', icon: Building2 },
 ];

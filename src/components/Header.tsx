@@ -103,10 +103,17 @@ const Header = () => {
 
         {/* Actions à droite */}
         <div className="flex items-center space-x-3">
-          <Button variant="ghost" size="sm">
-            <Bell className="w-4 h-4" />
-          </Button>
-          
+          {isAuthenticated && (
+            <>
+              <Link to="/messages">
+                <Button variant="ghost" size="sm" className="relative">
+                  <MessageCircle className="w-5 h-5" />
+                </Button>
+              </Link>
+              <NotificationDropdown />
+            </>
+          )}
+
           {isAuthenticated ? (
             <UserProfile />
           ) : (

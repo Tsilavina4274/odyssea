@@ -231,6 +231,10 @@ const Universities = () => {
             </div>
           </TabsContent>
 
+          <TabsContent value="google-map">
+            <GoogleMap />
+          </TabsContent>
+
           <TabsContent value="map">
             <FormationMap />
           </TabsContent>

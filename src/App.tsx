@@ -104,6 +104,11 @@ const App = () => (
               <Layout><Messages /></Layout>
             </ProtectedRoute>
           } />
+          <Route path="/notifications" element={
+            <ProtectedRoute allowedUserTypes={['lyceen']}>
+              <Layout><Notifications /></Layout>
+            </ProtectedRoute>
+          } />
           
           {/* Pages communes authentifiées */}
           <Route path="/support" element={

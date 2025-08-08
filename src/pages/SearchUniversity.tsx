@@ -171,7 +171,6 @@ const SearchUniversity = () => {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 };

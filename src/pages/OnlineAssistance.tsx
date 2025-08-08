@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -17,8 +16,6 @@ import {
   HeadphonesIcon,
   Calendar
 } from 'lucide-react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 const OnlineAssistance = () => {
   const [chatMessages, setChatMessages] = useState([

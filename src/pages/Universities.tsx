@@ -240,8 +240,6 @@ const Universities = () => {
           </TabsContent>
         </Tabs>
       </div>
-
-      <Footer />
     </div>
   );
 };

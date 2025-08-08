@@ -10,6 +10,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FormationMap from '@/components/FormationMap';
 import InteractiveMap from '@/components/InteractiveMap';
+import GoogleMap from '@/components/GoogleMap';
 
 const Universities = () => {
   const [searchTerm, setSearchTerm] = useState('');

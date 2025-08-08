@@ -35,6 +35,7 @@ import {
   ClipboardList,
   Library,
   MessageCircle,
+  Bell,
 } from 'lucide-react';
 
 const candidateItems = [

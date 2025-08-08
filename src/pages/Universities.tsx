@@ -101,17 +101,21 @@ const Universities = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="universities" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
             <TabsTrigger value="universities" className="flex items-center gap-2">
               <BookOpen className="w-4 h-4" />
               Universités
+            </TabsTrigger>
+            <TabsTrigger value="google-map" className="flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              Carte Google
             </TabsTrigger>
             <TabsTrigger value="map" className="flex items-center gap-2">
               <Map className="w-4 h-4" />
               Carte des formations
             </TabsTrigger>
             <TabsTrigger value="interactive-map" className="flex items-center gap-2">
-              <MapPin className="w-4 h-4" />
+              <Navigation className="w-4 h-4" />
               Carte interactive
             </TabsTrigger>
           </TabsList>

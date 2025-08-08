@@ -31,6 +31,8 @@ import Applications from './pages/Applications';
 import Calendar from './pages/Calendar';
 import EstablishmentDashboard from './pages/EstablishmentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import StudyResourcesPage from './pages/StudyResourcesPage';
+import Messages from './pages/Messages';
 
 const queryClient = new QueryClient();
 

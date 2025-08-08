@@ -93,6 +93,16 @@ const App = () => (
               <Layout><TrackApplications /></Layout>
             </ProtectedRoute>
           } />
+          <Route path="/study-resources" element={
+            <ProtectedRoute allowedUserTypes={['lyceen']}>
+              <Layout><StudyResourcesPage /></Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/messages" element={
+            <ProtectedRoute allowedUserTypes={['lyceen']}>
+              <Layout><Messages /></Layout>
+            </ProtectedRoute>
+          } />
           
           {/* Pages communes authentifiées */}
           <Route path="/support" element={

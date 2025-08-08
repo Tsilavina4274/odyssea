@@ -6,8 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Search, MapPin, Users, Star, Filter, BookOpen, Calendar, Map, Navigation } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import FormationMap from '@/components/FormationMap';
 import InteractiveMap from '@/components/InteractiveMap';
 import GoogleMap from '@/components/GoogleMap';

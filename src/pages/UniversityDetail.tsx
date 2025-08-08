@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -305,12 +304,82 @@ const UniversityDetail = () => {
           <TabsContent value="campus" className="mt-8">
             <Card>
               <CardContent className="p-6">
-                <div className="text-center py-12">
-                  <MapPin className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Localisation du campus</h3>
-                  <p className="text-muted-foreground mb-4">{university.address}</p>
-                  <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Carte interactive du campus</p>
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold mb-2">Localisation du campus</h3>
+                    <p className="text-muted-foreground mb-4">{university.address}</p>
+                  </div>
+
+                  {/* Campus Map */}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-semibold mb-2">Informations pratiques</h4>
+                        <div className="space-y-2 text-sm">
+                          <p><strong>Adresse :</strong> {university.address}</p>
+                          <p><strong>Transport :</strong> Métro ligne 4, RER B</p>
+                          <p><strong>Parking :</strong> Disponible sur campus</p>
+                          <p><strong>Accessibilité :</strong> PMR accessible</p>
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-2">Services à proximité</h4>
+                        <div className="space-y-2 text-sm">
+                          <p>🏥 Centre médical - 200m</p>
+                          <p>🍽️ Restaurant universitaire - Sur campus</p>
+                          <p>📚 Bibliothèque - Bâtiment principal</p>
+                          <p>🏃‍♂️ Installations sportives - 300m</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Map Container */}
+                    <div className="relative">
+                      <div id="campus-map" className="w-full h-80 bg-gray-100 rounded-lg border">
+                        <iframe
+                          src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(university.address)}&zoom=15`}
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0, borderRadius: '0.5rem' }}
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          title={`Carte de ${university.name}`}
+                        />
+                      </div>
+                      {!import.meta.env.VITE_GOOGLE_MAPS_API_KEY && (
+                        <div className="absolute inset-0 bg-gray-100 rounded-lg flex items-center justify-center">
+                          <div className="text-center p-4">
+                            <MapPin className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                            <p className="text-sm text-gray-600 mb-2">Carte non disponible</p>
+                            <p className="text-xs text-gray-500">
+                              Configuration de la clé API Google Maps requise
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Campus Photos */}
+                    <div>
+                      <h4 className="font-semibold mb-3">Photos du campus</h4>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {[
+                          'https://images.unsplash.com/photo-1562774053-701939374585?w=400',
+                          'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400',
+                          'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400',
+                          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400'
+                        ].map((src, index) => (
+                          <img
+                            key={index}
+                            src={src}
+                            alt={`Campus ${index + 1}`}
+                            className="w-full h-24 object-cover rounded-lg hover:opacity-80 transition-opacity cursor-pointer"
+                          />
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>

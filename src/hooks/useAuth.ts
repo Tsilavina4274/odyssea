@@ -1,177 +1,216 @@
 import { useState, useEffect, createContext, useContext } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
+import { User, Session } from '@supabase/supabase-js';
+import { authService, type LoginCredentials, type RegisterCredentials } from '../integrations/supabase/services/authService';
 
-interface User {
+interface UserProfile {
   id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  userType: 'lyceen' | 'universite';
-  institution: string;
+  user_id: string;
+  first_name?: string;
+  last_name?: string;
+  institution?: string;
+  user_type?: string;
+  phone?: string;
+  date_of_birth?: string;
+  address?: string;
+  city?: string;
+  postal_code?: string;
+  country?: string;
+  avatar_url?: string;
+  bio?: string;
+  current_level?: string;
+  specialization?: string;
+  grade_average?: number;
+  is_active: boolean;
+  email_notifications: boolean;
+  push_notifications: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  isAuthenticated: boolean;
+  profile: UserProfile | null;
+  session: Session | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (userData: RegisterData) => Promise<boolean>;
-  logout: () => void;
-  getDashboardPath: (userType: 'lyceen' | 'universite') => string;
-}
-
-interface RegisterData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  userType: 'lyceen' | 'universite';
-  institution: string;
+  isAuthenticated: boolean;
+  signIn: (credentials: LoginCredentials) => Promise<{ error: any }>;
+  signUp: (credentials: RegisterCredentials) => Promise<{ error: any }>;
+  signOut: () => Promise<void>;
+  updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => {
+export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};
+}
 
-export const useAuthProvider = () => {
+export function useAuthProvider(): AuthContextType {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const isAuthenticated = !!user;
+
+  // Charger le profil utilisateur
+  const loadUserProfile = async (userId: string) => {
+    try {
+      const { data, error } = await authService.getUserProfile(userId);
+      if (error) {
+        console.error('Error loading user profile:', error);
+        return;
+      }
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+    }
+  };
+
+  // Initialiser l'authentification
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        setIsAuthenticated(!!session);
+    let mounted = true;
 
-        if (session?.user) {
-          // Fetch user profile from our profiles table
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
-
-          if (profile) {
-            setUser({
-              id: profile.id,
-              email: session.user.email || '',
-              firstName: profile.first_name || '',
-              lastName: profile.last_name || '',
-              userType: profile.user_type as 'lyceen' | 'universite',
-              institution: profile.institution || '',
-            });
-          }
+    async function getInitialSession() {
+      const { session, error } = await authService.getCurrentSession();
+      
+      if (mounted) {
+        if (error) {
+          console.error('Error getting session:', error);
         } else {
-          setUser(null);
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          if (session?.user) {
+            await loadUserProfile(session.user.id);
+          }
         }
         setIsLoading(false);
+      }
+    }
+
+    getInitialSession();
+
+    // Écouter les changements d'authentification
+    const { data: { subscription } } = authService.onAuthStateChange(
+      async (event, session) => {
+        console.log('Auth state changed:', event, session);
+        
+        if (mounted) {
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          if (session?.user) {
+            await loadUserProfile(session.user.id);
+          } else {
+            setProfile(null);
+          }
+          setIsLoading(false);
+        }
       }
     );
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setIsAuthenticated(!!session);
-
-      if (session?.user) {
-        // Fetch user profile from our profiles table
-        setTimeout(async () => {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
-
-          if (profile) {
-            setUser({
-              id: profile.id,
-              email: session.user.email || '',
-              firstName: profile.first_name || '',
-              lastName: profile.last_name || '',
-              userType: profile.user_type as 'lyceen' | 'universite',
-              institution: profile.institution || '',
-            });
-          }
-          setIsLoading(false);
-        }, 0);
-      } else {
-        setIsLoading(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription?.unsubscribe();
+    };
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  // Connexion
+  const signIn = async (credentials: LoginCredentials) => {
+    setIsLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      return !error;
-    } catch (error) {
-      console.error('Login error:', error);
-      return false;
-    }
-  };
-
-  const getDashboardPath = (userType: 'lyceen' | 'universite') => {
-    return userType === 'lyceen' ? '/dashboard' : '/establishment-dashboard';
-  };
-
-  const register = async (userData: RegisterData): Promise<boolean> => {
-    try {
-      const redirectUrl = `${window.location.origin}/`;
+      const { user, error } = await authService.signIn(credentials);
+      if (error) {
+        return { error };
+      }
       
-      const { error } = await supabase.auth.signUp({
-        email: userData.email,
-        password: userData.password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            first_name: userData.firstName,
-            last_name: userData.lastName,
-            user_type: userData.userType,
-            institution: userData.institution,
-          }
-        }
-      });
-
-      return !error;
+      if (user) {
+        await loadUserProfile(user.id);
+      }
+      
+      return { error: null };
     } catch (error) {
-      console.error('Register error:', error);
-      return false;
+      return { error };
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const logout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setSession(null);
-    setIsAuthenticated(false);
+  // Inscription
+  const signUp = async (credentials: RegisterCredentials) => {
+    setIsLoading(true);
+    try {
+      const { user, error } = await authService.signUp(credentials);
+      if (error) {
+        return { error };
+      }
+      
+      return { error: null };
+    } catch (error) {
+      return { error };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Déconnexion
+  const signOut = async () => {
+    setIsLoading(true);
+    try {
+      await authService.signOut();
+      setUser(null);
+      setProfile(null);
+      setSession(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Mettre à jour le profil
+  const updateProfile = async (updates: Partial<UserProfile>) => {
+    if (!user) {
+      return { error: { message: 'No user authenticated' } };
+    }
+
+    try {
+      const { data, error } = await authService.updateUserProfile(user.id, updates);
+      if (error) {
+        return { error };
+      }
+      
+      setProfile(data);
+      return { error: null };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  // Rafraîchir le profil
+  const refreshProfile = async () => {
+    if (!user) return;
+    await loadUserProfile(user.id);
   };
 
   return {
     user,
-    isAuthenticated,
+    profile,
+    session,
     isLoading,
-    login,
-    register,
-    logout,
-    getDashboardPath,
+    isAuthenticated,
+    signIn,
+    signUp,
+    signOut,
+    updateProfile,
+    refreshProfile,
   };
-};
+}
 
 export { AuthContext };
-export type { User, AuthContextType, RegisterData };

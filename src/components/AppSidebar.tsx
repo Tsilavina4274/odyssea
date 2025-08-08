@@ -79,14 +79,18 @@ export function AppSidebar() {
   const { user, isAuthenticated } = useAuth();
   const [userType, setUserType] = useState<'candidate' | 'establishment' | 'admin'>('candidate');
 
-  // Synchroniser le type d'utilisateur avec l'authentification
+  // Déterminer le type d'utilisateur automatiquement
   useEffect(() => {
     if (isAuthenticated && user) {
       if (user.userType === 'lyceen') {
         setUserType('candidate');
       } else if (user.userType === 'universite') {
         setUserType('establishment');
+      } else {
+        setUserType('admin');
       }
+    } else {
+      setUserType('candidate'); // Par défaut pour les non-connectés
     }
   }, [isAuthenticated, user]);
 

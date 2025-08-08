@@ -105,8 +105,7 @@ const Blog = () => {
   const regularArticles = filteredArticles.filter(article => !article.featured);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="bg-background">
       
       <section className="bg-gradient-to-br from-primary/10 to-purple-100/20 py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

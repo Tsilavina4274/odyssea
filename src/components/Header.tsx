@@ -1,11 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Bell, User, Menu, LogOut } from 'lucide-react';
+import { Bell, User, Menu, LogOut, MessageCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { AppNavigationMenu } from './NavigationMenu';
 import { UserProfile } from './UserProfile';
+import NotificationDropdown from './NotificationDropdown';
 
 const Header = () => {
   const location = useLocation();

@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -43,6 +42,12 @@ const Header = () => {
         return 'Créer une Candidature';
       case '/track-applications':
         return 'Suivi des Candidatures';
+      case '/messages':
+        return 'Messages';
+      case '/notifications':
+        return 'Notifications';
+      case '/study-resources':
+        return 'Ressources d\'étude';
       case '/online-assistance':
         return 'Assistance en Ligne';
       case '/orientation-guide':

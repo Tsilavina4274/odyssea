@@ -33,6 +33,7 @@ import EstablishmentDashboard from './pages/EstablishmentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import StudyResourcesPage from './pages/StudyResourcesPage';
 import Messages from './pages/Messages';
+import Notifications from './pages/Notifications';
 
 const queryClient = new QueryClient();
 

@@ -176,7 +176,6 @@ const TrackApplications = () => {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 };

@@ -112,38 +112,6 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {/* Sélecteur de type d'utilisateur */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Type d'utilisateur</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <div className="flex flex-col space-y-1 p-2">
-              <button
-                onClick={() => setUserType('candidate')}
-                className={`text-left px-2 py-1 rounded text-sm ${
-                  userType === 'candidate' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
-                }`}
-              >
-                {state === 'expanded' ? 'Candidat' : 'C'}
-              </button>
-              <button
-                onClick={() => setUserType('establishment')}
-                className={`text-left px-2 py-1 rounded text-sm ${
-                  userType === 'establishment' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
-                }`}
-              >
-                {state === 'expanded' ? 'Établissement' : 'E'}
-              </button>
-              <button
-                onClick={() => setUserType('admin')}
-                className={`text-left px-2 py-1 rounded text-sm ${
-                  userType === 'admin' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
-                }`}
-              >
-                {state === 'expanded' ? 'Admin' : 'A'}
-              </button>
-            </div>
-          </SidebarGroupContent>
-        </SidebarGroup>
 
         {/* Menu principal selon le type d'utilisateur */}
         {userType === 'candidate' && (

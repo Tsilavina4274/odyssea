@@ -85,16 +85,11 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 items-center justify-between px-6">
-        {/* Trigger de la sidebar à gauche */}
+        {/* Trigger de la sidebar et titre */}
         <div className="flex items-center space-x-4">
           <SidebarTrigger />
-          
-          {/* Navigation desktop */}
-          <div className="hidden lg:block">
-            <AppNavigationMenu />
-          </div>
-          
-          <div className="hidden md:block lg:hidden">
+
+          <div className="hidden md:block">
             <h2 className="text-lg font-semibold">
               {getPageTitle()}
             </h2>

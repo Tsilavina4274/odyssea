@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   Search, 
@@ -10,8 +9,36 @@ import {
   MapPin,
   Users
 } from 'lucide-react';
+import React, { useEffect } from 'react';
 
 const Features = () => {
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes emoji-float {
+        0% { transform: translateY(100%) rotate(0deg); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateY(-150%) rotate(360deg); opacity: 0; }
+      }
+      @keyframes emoji-bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      .animate-emoji-float > span {
+        animation: emoji-float 6s linear infinite;
+        display: inline-block;
+        user-select: none;
+      }
+      .animate-emoji-bounce {
+        animation: emoji-bounce 2s ease-in-out infinite;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   const features = [
     {
       icon: Search,
@@ -63,9 +90,25 @@ const Features = () => {
     }
   ];
 
+  // Liste des emojis à faire flotter
+  const emojis = ['🎉', '🎈', '🎊', '✨','🎓'];
+
   return (
-    <section className="py-20 bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-20 bg-background overflow-hidden">
+      {/* Fond animé emojis avec plusieurs types */}
+      <div className="absolute inset-0 pointer-events-none flex flex-wrap gap-2 p-8 animate-emoji-float">
+        {Array(40).fill(0).map((_, i) => (
+          <span
+            key={i}
+            className="text-3xl animate-emoji-bounce"
+            style={{ animationDelay: `${i * 0.2}s` }}
+          >
+            {emojis[i % emojis.length]}
+          </span>
+        ))}
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             Tout ce dont tu as besoin pour ton orientation

@@ -33,16 +33,17 @@ ON public.formations FOR SELECT
 USING (is_active = true);
 
 -- Politique pour permettre la modification aux universités propriétaires
-CREATE POLICY "Formations can be managed by university owners" 
-ON public.formations FOR ALL 
-USING (
-    university_id IN (
-        SELECT u.id FROM universities u, profiles p 
-        WHERE p.user_id = auth.uid() 
-        AND p.institution = u.name 
-        AND p.user_type = 'universite'
-    )
-);
+-- Note: Cette politique sera ajoutée après que tous les systèmes soient en place
+-- CREATE POLICY "Formations can be managed by university owners"
+-- ON public.formations FOR ALL
+-- USING (
+--     university_id IN (
+--         SELECT u.id FROM universities u, profiles p
+--         WHERE p.user_id = auth.uid()
+--         AND p.institution = u.name
+--         AND p.user_type = 'universite'
+--     )
+-- );
 
 -- Trigger pour la table formations
 CREATE TRIGGER update_formations_updated_at BEFORE UPDATE ON public.formations

@@ -34,11 +34,12 @@ ON public.universities FOR SELECT
 USING (true);
 
 -- Politique pour permettre la modification aux utilisateurs université
-CREATE POLICY "Universities can be updated by their owners" 
-ON public.universities FOR UPDATE 
-USING (auth.uid() IN (
-    SELECT user_id FROM profiles WHERE institution = universities.name AND user_type = 'universite'
-));
+-- Note: Cette politique sera ajoutée après que tous les systèmes soient en place
+-- CREATE POLICY "Universities can be updated by their owners"
+-- ON public.universities FOR UPDATE
+-- USING (auth.uid() IN (
+--     SELECT user_id FROM profiles WHERE institution = universities.name AND user_type = 'universite'
+-- ));
 
 -- Fonction pour mettre à jour updated_at automatiquement
 CREATE OR REPLACE FUNCTION update_updated_at_column()

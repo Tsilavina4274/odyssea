@@ -34,6 +34,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import StudyResourcesPage from './pages/StudyResourcesPage';
 import Messages from './pages/Messages';
 import Notifications from './pages/Notifications';
+import TestSupabase from './pages/TestSupabase';
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
           <Route path="/blog" element={<Layout><Blog /></Layout>} />
           <Route path="/orientation-guide" element={<Layout><OrientationGuide /></Layout>} />
           <Route path="/gdpr" element={<Layout><GDPR /></Layout>} />
+          <Route path="/test-supabase" element={<Layout><TestSupabase /></Layout>} />
           
           {/* Pages pour lycéens */}
           <Route path="/profile" element={

@@ -34,6 +34,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import StudyResourcesPage from './pages/StudyResourcesPage';
 import Messages from './pages/Messages';
 import Notifications from './pages/Notifications';
+import TestSupabase from './pages/TestSupabase';
 
 const queryClient = new QueryClient();
 

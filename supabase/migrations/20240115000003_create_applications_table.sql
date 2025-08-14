@@ -42,30 +42,30 @@ ON public.applications FOR ALL
 USING (student_id = auth.uid());
 
 -- Politique pour que les universités voient les candidatures à leurs formations
-CREATE POLICY "Universities can view applications to their formations" 
-ON public.applications FOR SELECT 
-USING (
-    formation_id IN (
-        SELECT f.id FROM formations f, universities u, profiles p 
-        WHERE f.university_id = u.id 
-        AND p.user_id = auth.uid() 
-        AND p.institution = u.name 
-        AND p.user_type = 'universite'
-    )
-);
+-- Note: Ces politiques seront ajoutées après que tous les systèmes soient en place
+-- CREATE POLICY "Universities can view applications to their formations"
+-- ON public.applications FOR SELECT
+-- USING (
+--     formation_id IN (
+--         SELECT f.id FROM formations f, universities u, profiles p
+--         WHERE f.university_id = u.id
+--         AND p.user_id = auth.uid()
+--         AND p.institution = u.name
+--         AND p.user_type = 'universite'
+--     )
+-- );
 
--- Politique pour que les universités modifient les candidatures à leurs formations
-CREATE POLICY "Universities can update applications to their formations" 
-ON public.applications FOR UPDATE 
-USING (
-    formation_id IN (
-        SELECT f.id FROM formations f, universities u, profiles p 
-        WHERE f.university_id = u.id 
-        AND p.user_id = auth.uid() 
-        AND p.institution = u.name 
-        AND p.user_type = 'universite'
-    )
-);
+-- CREATE POLICY "Universities can update applications to their formations"
+-- ON public.applications FOR UPDATE
+-- USING (
+--     formation_id IN (
+--         SELECT f.id FROM formations f, universities u, profiles p
+--         WHERE f.university_id = u.id
+--         AND p.user_id = auth.uid()
+--         AND p.institution = u.name
+--         AND p.user_type = 'universite'
+--     )
+-- );
 
 -- Trigger pour la table applications
 CREATE TRIGGER update_applications_updated_at BEFORE UPDATE ON public.applications

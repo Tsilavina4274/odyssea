@@ -131,23 +131,24 @@ async function testUniversityUserFlow() {
       .single();
     
     if (universityError) {
-      if (universityError.message.includes('duplicate key')) {
+      if (universityError.message && universityError.message.includes('duplicate key')) {
         console.log('⚠️  Université déjà existante, récupération...');
-        
+
         const { data: existingUniversity, error: fetchError } = await supabaseAdmin
           .from('universities')
           .select('*')
           .eq('name', universityData.name)
           .single();
-        
+
         if (fetchError) {
           throw new Error(`Erreur récupération université: ${fetchError.message}`);
         }
-        
+
         university = existingUniversity;
         console.log('✅ Université existante récupérée');
       } else {
-        throw new Error(`Erreur création université: ${universityError.message}`);
+        console.log('🔍 Erreur université:', universityError);
+        throw new Error(`Erreur création université: ${universityError.message || JSON.stringify(universityError)}`);
       }
     } else {
       console.log('✅ Université créée avec succès');

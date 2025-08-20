@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "migrate": "node scripts/simple-migrate.js",
-    "test-db": "node scripts/simple-migrate.js"
+    "test-db": "node scripts/simple-migrate.js",
+    "list-tables": "node scripts/list-tables.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

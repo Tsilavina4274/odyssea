@@ -15,7 +15,8 @@
     "test-university": "node scripts/test-university-flow.js",
     "check-profiles": "node scripts/check-profiles-structure.js",
     "test-universities": "node scripts/test-universities-table.js",
-    "show-migrations": "node scripts/manual-create-tables.js"
+    "show-migrations": "node scripts/manual-create-tables.js",
+    "run-migrations": "node scripts/execute-migrations.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

@@ -116,7 +116,7 @@ async function testUniversityUserFlow() {
       console.log('✅ Profil créé manuellement');
       profile = newProfile;
     } else {
-      console.log('✅ Profil trouvé');
+      console.log('�� Profil trouvé');
     }
     
     console.log(`👤 Profil: ${profile.first_name} ${profile.last_name} (${profile.user_type})`);
@@ -124,11 +124,15 @@ async function testUniversityUserFlow() {
     // 3. Création de l'université
     console.log('\n📝 Étape 3: Création de l\'université...');
     
+    console.log('📋 Données université à insérer:', universityData);
+
     const { data: university, error: universityError } = await supabaseAdmin
       .from('universities')
       .insert(universityData)
       .select()
       .single();
+
+    console.log('🔍 Résultat insertion:', { data: university, error: universityError });
     
     if (universityError) {
       if (universityError.message && universityError.message.includes('duplicate key')) {

@@ -87,20 +87,20 @@ async function testUniversityUserFlow() {
     
     // 2. Vérifier la création automatique du profil
     console.log('\n📝 Étape 2: Vérification du profil utilisateur...');
-    
+
     const { data: profile, error: profileError } = await supabaseAdmin
       .from('profiles')
       .select('*')
-      .eq('user_id', authData.user.id)
+      .eq('id', authData.user.id)
       .single();
-    
+
     if (profileError) {
       console.log('⚠️  Profil non trouvé, création manuelle...');
-      
+
       const { data: newProfile, error: createProfileError } = await supabaseAdmin
         .from('profiles')
         .insert({
-          user_id: authData.user.id,
+          id: authData.user.id,
           first_name: testUniversity.firstName,
           last_name: testUniversity.lastName,
           institution: testUniversity.institution,
@@ -108,11 +108,11 @@ async function testUniversityUserFlow() {
         })
         .select()
         .single();
-      
+
       if (createProfileError) {
         throw new Error(`Erreur création profil: ${createProfileError.message}`);
       }
-      
+
       console.log('✅ Profil créé manuellement');
       profile = newProfile;
     } else {

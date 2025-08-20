@@ -12,7 +12,8 @@
     "migrate": "node scripts/simple-migrate.js",
     "test-db": "node scripts/simple-migrate.js",
     "list-tables": "node scripts/list-tables.js",
-    "test-university": "node scripts/test-university-flow.js"
+    "test-university": "node scripts/test-university-flow.js",
+    "check-profiles": "node scripts/check-profiles-structure.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

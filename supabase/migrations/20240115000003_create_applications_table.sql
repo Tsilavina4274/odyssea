@@ -42,53 +42,33 @@ ON public.applications FOR ALL
 USING (student_id = auth.uid());
 
 -- Politique pour que les universités voient les candidatures à leurs formations
-CREATE POLICY "Universities can view applications to their formations" 
-ON public.applications FOR SELECT 
-USING (
-    formation_id IN (
-        SELECT f.id FROM formations f, universities u, profiles p 
-        WHERE f.university_id = u.id 
-        AND p.user_id = auth.uid() 
-        AND p.institution = u.name 
-        AND p.user_type = 'universite'
-    )
-);
+-- Note: Ces politiques seront ajoutées après que tous les systèmes soient en place
+-- CREATE POLICY "Universities can view applications to their formations"
+-- ON public.applications FOR SELECT
+-- USING (
+--     formation_id IN (
+--         SELECT f.id FROM formations f, universities u, profiles p
+--         WHERE f.university_id = u.id
+--         AND p.user_id = auth.uid()
+--         AND p.institution = u.name
+--         AND p.user_type = 'universite'
+--     )
+-- );
 
--- Politique pour que les universités modifient les candidatures à leurs formations
-CREATE POLICY "Universities can update applications to their formations" 
-ON public.applications FOR UPDATE 
-USING (
-    formation_id IN (
-        SELECT f.id FROM formations f, universities u, profiles p 
-        WHERE f.university_id = u.id 
-        AND p.user_id = auth.uid() 
-        AND p.institution = u.name 
-        AND p.user_type = 'universite'
-    )
-);
+-- CREATE POLICY "Universities can update applications to their formations"
+-- ON public.applications FOR UPDATE
+-- USING (
+--     formation_id IN (
+--         SELECT f.id FROM formations f, universities u, profiles p
+--         WHERE f.university_id = u.id
+--         AND p.user_id = auth.uid()
+--         AND p.institution = u.name
+--         AND p.user_type = 'universite'
+--     )
+-- );
 
 -- Trigger pour la table applications
 CREATE TRIGGER update_applications_updated_at BEFORE UPDATE ON public.applications
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- Fonction pour envoyer une notification quand le statut change
-CREATE OR REPLACE FUNCTION notify_application_status_change()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.status != OLD.status THEN
-        INSERT INTO notifications (user_id, type, title, message, related_id)
-        VALUES (
-            NEW.student_id,
-            'application_update',
-            'Mise à jour de candidature',
-            'Le statut de votre candidature a changé: ' || NEW.status,
-            NEW.id
-        );
-    END IF;
-    RETURN NEW;
-END;
-$$ language 'plpgsql';
-
--- Trigger pour les notifications
-CREATE TRIGGER application_status_notification AFTER UPDATE ON public.applications
-    FOR EACH ROW EXECUTE FUNCTION notify_application_status_change();
+-- Note: Le trigger pour les notifications sera ajouté après la création de la table notifications

@@ -8,7 +8,15 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "migrate": "node scripts/simple-migrate.js",
+    "test-db": "node scripts/simple-migrate.js",
+    "list-tables": "node scripts/list-tables.js",
+    "test-university": "node scripts/test-university-flow.js",
+    "check-profiles": "node scripts/check-profiles-structure.js",
+    "test-universities": "node scripts/test-universities-table.js",
+    "show-migrations": "node scripts/manual-create-tables.js",
+    "run-migrations": "node scripts/execute-migrations.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
